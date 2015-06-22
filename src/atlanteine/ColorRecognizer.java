@@ -1,22 +1,24 @@
 package atlanteine;
 
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.text.NumberFormat;
 
-public class ColorDecrypter extends JFrame {
+/**
+ * I have no fucking clue what that class was for exactly. All I know is that "ColorDecrypter" couldn't have been a
+ * good name for it.
+ */
+public class ColorRecognizer extends JFrame {
 	
 	private JTextField red, green, blue, oraRed, oraGreen, oraBlue;
 	private JSlider opacity;
 	private JPanel original, orange, result;
 	
 	public static void main(String[] args) {
-		new ColorDecrypter();
+		new ColorRecognizer();
 	}
 	
-	public ColorDecrypter() {
+	public ColorRecognizer() {
 		
 		setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -76,30 +78,22 @@ public class ColorDecrypter extends JFrame {
 		opacity.setMinorTickSpacing(1);
 		opacity.setPaintTicks(true);
 		opacity.setPaintLabels(true);
-		opacity.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				update();
-			}
-		});
+		opacity.addChangeListener(e -> update());
 		gbc.gridx = 0;
 		gbc.gridy = 3;
 		gbc.gridwidth = 3;
 		add(opacity, gbc);
 		
 		JButton up = new JButton("update");
-		gbc.fill = gbc.NONE;
+		gbc.fill = GridBagConstraints.NONE;
 		gbc.gridy = 4;
 		gbc.gridx = 0;
 		gbc.gridwidth = 3;
-		up.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				update();
-			}
-		});
+		up.addActionListener(e -> update());
 		add(up, gbc);
 		
 		setPreferredSize(new Dimension(300, 300));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		pack();
 		setVisible(true);
 		

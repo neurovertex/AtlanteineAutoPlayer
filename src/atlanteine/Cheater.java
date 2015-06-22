@@ -15,8 +15,6 @@ public class Cheater {
 	private Game game;
 	private boolean found = false, autoplay = false;
 	private Window window;
-	
-	//private PathDisplayer pathDisplayer;
 	private int areax, areay;
 	public static final Dimension areaSize = new Dimension(300, 300);
 	
@@ -30,7 +28,6 @@ public class Cheater {
 			System.out.println("Votre système n'autorise pas la prise de contrôle de la souris. Vous l'avez dans l'OS ");
 			System.exit(0);
 		}
-	//	pathDisplayer = new PathDisplayer(this);
 		player = new AutoPlayer(this);
 		window = new Window(this);
 	}
@@ -70,7 +67,7 @@ public class Cheater {
 					ex.printStackTrace();
 				try {
 					Thread.sleep(250);
-				} catch (InterruptedException e) {}
+				} catch (InterruptedException ignored) {}
 			}
 		window.update();
 	}
@@ -82,7 +79,7 @@ public class Cheater {
 	public void setAutoplay(boolean b) {
 		autoplay = b;
 		if (b && ! player.isPlaying())
-			player.setPlaying(b);
+			player.setPlaying(true);
 	}
 	
 	public boolean isAutoplaying() {
@@ -93,11 +90,11 @@ public class Cheater {
 		while (getGameArea() == null) {
 			try {
 				Thread.sleep(100);
-			} catch(InterruptedException e) { }
+			} catch(InterruptedException ignored) { }
 		}
 		try {
 			Thread.sleep(1000);
-		} catch(InterruptedException e) { }
+		} catch(InterruptedException ignored) { }
 	}
 	
 	public BufferedImage getGameArea() {
@@ -114,8 +111,7 @@ public class Cheater {
 		
 		if (areax != -1 && areay != -1) {
 			System.out.println("Game area found at : "+ areax +","+ areay);
-			BufferedImage img = robot.createScreenCapture(new Rectangle(areax, areay, areaSize.width, areaSize.height));
-			return img;
+			return robot.createScreenCapture(new Rectangle(areax, areay, areaSize.width, areaSize.height));
 		} else {
 			System.out.println("Game area not found");
 			return null;

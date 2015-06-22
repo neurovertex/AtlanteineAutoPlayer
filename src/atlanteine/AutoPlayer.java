@@ -1,12 +1,13 @@
 package atlanteine;
 
 import atlanteine.Game.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Point;
+import java.awt.Robot;
 import java.awt.image.BufferedImage;
 
 public class AutoPlayer {
 	private Cheater cheater;
-	private Tracker tracker; // Pumpkin Tracker
 	private Game current;
 	private volatile int pumx, pumy;
 	private Point pumpPos;
@@ -18,11 +19,10 @@ public class AutoPlayer {
 	
 	public AutoPlayer(Cheater c) {
 		cheater = c;
-		w = cheater.areaSize.width / Game.GRID_WIDTH;
-		h = cheater.areaSize.height / Game.GRID_HEIGHT;
+		w = Cheater.areaSize.width / Game.GRID_WIDTH;
+		h = Cheater.areaSize.height / Game.GRID_HEIGHT;
 		play = false;
-		tracker = new Tracker();
-		tracker.start();
+		new Tracker().start();
 		pumpPos = new Point();
 	}
 	
@@ -57,19 +57,19 @@ public class AutoPlayer {
 				return true;
 		return false;
 	}
-	
+
 	private class Tracker extends Thread {
 		public Tracker() {
 			setDaemon(true);
 			setName("PumpkinTracker");
 		}
-		
+
 		@Override
 		public synchronized void run() {
 			onEnterFrame();
 		}
 	}
-	
+
 	public void onEnterFrame() {
 		int wait = 100;
 		Robot r = cheater.getRobot();
@@ -90,7 +90,7 @@ public class AutoPlayer {
 				for (i = 0; i < dirs.length; i ++) {
 					try {
 						Thread.sleep(wait);
-					} catch(InterruptedException e) {}
+					} catch(InterruptedException ignored) {}
 					if (r.getPixelColor(cheater.getAreaCorner().x, cheater.getAreaCorner().y).equals(Game.BORDER_COLOR)) {
 						Point pos = points[i], screenpos = gridToArea(pos);
 						Direction d = dirs[i];
@@ -120,7 +120,7 @@ public class AutoPlayer {
 				r.delay(500);
 				cheater.update();
 				
-			} catch (InterruptedException e) { }
+			} catch (InterruptedException ignored) { }
 		}
 	}
 	

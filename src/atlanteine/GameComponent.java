@@ -1,7 +1,10 @@
 package atlanteine;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.image.*;
 import java.awt.event.*;
 
@@ -31,15 +34,6 @@ public class GameComponent extends JPanel implements MouseListener, MouseMotionL
 				g.setColor(Color.orange);
 				g.fillOval(pumpPos.x - 11, pumpPos.y - 11, 22, 22);
 			}
-			/*if (overx != -1 && overy != -1) {
-				int x = (int) ((double)overx * Game.GRID_WIDTH / img.getWidth());
-				int y = (int) ((double)overy * Game.GRID_HEIGHT / img.getHeight());
-				x = (x >= Game.GRID_WIDTH) ? Game.GRID_WIDTH - 1 : x;
-				y = (y >= Game.GRID_HEIGHT) ? Game.GRID_HEIGHT - 1 : y;
-				Color c = cheater.getGame().getCaseAt(x, y).getColor();
-				g.setColor(c);
-				//g.fillRect(x * img.getWidth() / Game.GRID_WIDTH, y * img.getHeight() / Game.GRID_HEIGHT, img.getWidth() / Game.GRID_WIDTH, img.getHeight() / Game.GRID_HEIGHT);
-			}*/
 		} else {
 			g.setColor(Color.red);
 			g.drawLine(0, 0, getWidth()-1, getHeight()-1);
@@ -93,8 +87,6 @@ public class GameComponent extends JPanel implements MouseListener, MouseMotionL
 			int y = (int) ((double)e.getY() * Game.GRID_HEIGHT / cheater.getGame().getGameArea().getHeight());
 			System.out.println(x +":"+ y +":"+ cheater.getGame().getCaseAt(x, y).name());
 		} else if (e.getButton() == MouseEvent.BUTTON3) {
-			/*int x = (int) ((double)e.getX() * Game.GRID_WIDTH / cheater.getGame().getOverview().getWidth()) * cheater.getGame().getOverview().getWidth() / Game.GRID_WIDTH;
-			int y = (int) ((double)e.getY() * Game.GRID_HEIGHT / cheater.getGame().getOverview().getHeight()) * cheater.getGame().getOverview().getHeight() / Game.GRID_HEIGHT;*/
 			Color c = new Color(cheater.getGame().getGameArea().getRGB(e.getX(), e.getY()));
 			System.out.println(e.getX() +":"+ e.getY() +" -> "+ c.getRed() +":"+ c.getGreen() +":"+ c.getBlue());
 		} else {

@@ -1,9 +1,13 @@
 package atlanteine;
 
-import java.util.ArrayList;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Game {
 	
@@ -23,9 +27,9 @@ public class Game {
 		
 		private Color[] color;
 		private boolean stop;
-		private Elements(boolean s, Color ... c){ color = c; stop = s; }
-		private Elements(Color c, boolean s){ color = new Color[]{c}; stop = s; }
-		private Elements(int r, int g, int b, boolean s) { this(s, new Color(r, g, b));}
+		Elements(boolean s, Color... c){ color = c; stop = s; }
+		Elements(Color c, boolean s){ color = new Color[]{c}; stop = s; }
+		Elements(int r, int g, int b, boolean s) { this(s, new Color(r, g, b));}
 		public double colorDist(Color c) {
 			double min = Double.MAX_VALUE;
 			
@@ -53,7 +57,6 @@ public class Game {
 	private BufferedImage overview;
 	private BufferedImage gameArea;
 	private Elements[][] grid;
-	private Cheater cheater;
 	private Pumpkin pump;
 	private int boxes;
 	private Path bestPath;
@@ -92,8 +95,6 @@ public class Game {
 	}
 	
 	public Game(Cheater c) {
-		cheater = c;
-		//c.getPathDisplayer().hideWindow();
 		grid = new Elements[GRID_HEIGHT][GRID_WIDTH];
 		gameArea = c.getGameArea();
 		if (gameArea != null) {
@@ -117,7 +118,6 @@ public class Game {
 				for (int i = 0; i < GRID_WIDTH; i ++) {
 					if (grid[j][i] == null) {
 						Color pix = getAverageColor(gameArea, (int)((i + 0.5) * w), (int)((j + 0.5) * h), rad);
-						//System.out.println(i +","+ j +" -> "+ (int)((i + 0.5) * w) +","+ (int)((j + 0.5) * h) +"->"+ gameArea.getRGB((int)(i * w), (int)(j * h)) +" -> "+ pix.getRed() +":"+ pix.getGreen() +":"+ pix.getBlue());
 						Elements e = Elements.getNearest(pix);
 						g.setColor(pix);
 						g.fillOval((int)((i + 0.5) * w) - rad, (int)((j + 0.5) * h) - rad, 2*rad+1, 2*rad+1);
@@ -194,13 +194,8 @@ public class Game {
 			bestPath = findBestPath();
 			if (bestPath != null) {
 				bestPath.display(g);
-				/*for (int i = 0; i < bestPath.getPath().size(); i ++)
-					System.out.println(bestPath.getPoints().get(i).x +":"+ bestPath.getPoints().get(i).y +" -> "+ bestPath.getPath().get(i).name());
-				System.out.println(bestPath.getLastPoint());
-				System.out.println("And there you are :)");*/
-				//c.getPathDisplayer().showWindow(bestPath);
-				if (cheater.getPlayer() != null)
-					cheater.getPlayer().newGame(this);
+				if (c.getPlayer() != null)
+					c.getPlayer().newGame(this);
 			} else
 				System.out.println("OMAGAD ! PATH NOT FOUND !");
 		} else
@@ -350,7 +345,7 @@ public class Game {
 		
 		private int angle;
 		private int keyCode;
-		private Direction(int d, int c) { angle = d; keyCode = c; }
+		Direction(int d, int c) { angle = d; keyCode = c; }
 		public double getAngle() { return Math.PI/2 * angle;}
 		public int getKeyCode() { return keyCode;}
 		public int dx() { return cos(); }
@@ -368,8 +363,7 @@ public class Game {
 				polyx[j] = px * w / 10;
 				polyy[j] = py * h / 10;
 			}
-			Polygon poly = new Polygon(polyx, polyy, n);
-			return poly;
+			return new Polygon(polyx, polyy, n);
 		}
 		
 		public static Direction[] getSideDirs(Direction d) {
@@ -400,14 +394,12 @@ public class Game {
 		private ArrayList<Point> points;
 		private boolean boxmoved;
 		
-		public Path() { path = new ArrayList<Direction>(); points = new ArrayList<Point>(); boxmoved = false; }
+		public Path() { path = new ArrayList<>(); points = new ArrayList<>(); boxmoved = false; }
 		
 		public Path(ArrayList<Direction> ds, ArrayList<Point> a, boolean b) {
 			this();
-			for (Point p : a)
-				points.add(p);
-			for (Direction d : ds)
-				path.add(d);
+			points.addAll(a.stream().collect(Collectors.toList()));
+			path.addAll(ds.stream().collect(Collectors.toList()));
 			boxmoved = b;
 		}
 		
