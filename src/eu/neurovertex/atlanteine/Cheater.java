@@ -1,4 +1,4 @@
-package atlanteine;
+package eu.neurovertex.atlanteine;
 
 import java.awt.Robot;
 import java.awt.Point;

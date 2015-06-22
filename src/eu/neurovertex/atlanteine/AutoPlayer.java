@@ -1,6 +1,5 @@
-package atlanteine;
+package eu.neurovertex.atlanteine;
 
-import atlanteine.Game.*;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Robot;
@@ -14,7 +13,7 @@ public class AutoPlayer {
 	private int w, h;
 	private static final Color[] pumpkinColors = new Color[]{new Color(255, 106, 0),new Color(255, 222, 21),  new Color(255, 255, 63), new Color(255, 144, 0), new Color(195, 105, 21), new Color(246, 117, 19), new Color(255, 176, 15)};
 	private static final int radius = 11;
-	private Path path;
+	private Game.Path path;
 	private boolean play;
 	
 	public AutoPlayer(Cheater c) {
@@ -84,7 +83,7 @@ public class AutoPlayer {
 				System.out.println("Starting playing");
 				
 				Point[] points = path.getPoints().toArray(new Point[path.getPoints().size()]);
-				Direction[] dirs = path.getPath().toArray(new Direction[path.getPath().size()]);
+				Game.Direction[] dirs = path.getPath().toArray(new Game.Direction[path.getPath().size()]);
 				focusOnGame();
 				int i;
 				for (i = 0; i < dirs.length; i ++) {
@@ -93,7 +92,7 @@ public class AutoPlayer {
 					} catch(InterruptedException ignored) {}
 					if (r.getPixelColor(cheater.getAreaCorner().x, cheater.getAreaCorner().y).equals(Game.BORDER_COLOR)) {
 						Point pos = points[i], screenpos = gridToArea(pos);
-						Direction d = dirs[i];
+						Game.Direction d = dirs[i];
 						if (isPumpkin(r.getPixelColor(cheater.getAreaCorner().x + screenpos.x, cheater.getAreaCorner().y + screenpos.y))) {
 							pumpPos.setLocation(pos);
 							System.out.println("Going "+ d.name());
@@ -139,7 +138,7 @@ public class AutoPlayer {
 	public int onPumpkinStopped() {
 		Point pos = areaToGrid(pumpPos);
 		if (path.containsPoint(pos)) {
-			Direction d = path.getDirectionAt(pos);
+			Game.Direction d = path.getDirectionAt(pos);
 			focusOnGame();
 			Robot r = cheater.getRobot();
 			r.keyPress(d.getKeyCode());

@@ -1,4 +1,4 @@
-package atlanteine;
+package eu.neurovertex.atlanteine;
 
 import java.awt.Color;
 import java.awt.Graphics;
